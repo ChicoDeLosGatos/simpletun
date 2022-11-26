@@ -1,0 +1,11 @@
+#!/bin/bash
+ip tuntap add dev tun0 mode tun
+echo "ip tuntap add dev tun0 mode tun [OK]"
+ip link set tun0 up
+echo "ip link set tun0 up [OK]"
+ip addr add 10.122.101.1/30 dev tun0
+echo "ip addr add 10.122.101.1/30 dev tun0"
+echo "Running simpletun server..."
+./simpletun -i tun0 -s &
+echo "Simpletun server is ready"
+route -n
