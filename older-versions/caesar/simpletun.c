@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <linux/if.h>
@@ -49,10 +48,6 @@
 #define IP_HDR_LEN 20
 #define ETH_HDR_LEN 14
 #define ARP_PKT_LEN 28
-
-#define RSA_N 247
-#define RSA_D 133
-#define RSA_E 13
 
 int debug;
 char *progname;
@@ -182,49 +177,19 @@ void usage(void) {
   exit(1);
 }
 
-/**
- * SECCIÓN RSA
-*/
-
-// The Modular Exponentiation Algorithm
-int MEA(int p, int e, int n){
- 
-  int r2 = 1;
-  int r1 = 0;
-  int Q = 0;
-  int R = 0;
- 
-  while( e != 0 ){
-     R = (e % 2);
-     Q = ((e - R) / 2);
- 
-     r1 = ((p * p) % n);
- 
-       if(R == 1){
-          r2 = ((r2 * p) % n);
-       }
-     p = r1;
-     e = Q;
-  }
-return r2;
-}
-
-// Received input from user
-void rsa_encode(char *buffer, int read, int e, int n){
-  int i = 0;
- for(i = 0; i < read; i++)
-    buffer[i] = MEA(buffer[i], e, n);
-}
-
-void rsa_decode(char *buffer, int read, int d, int n){
+void caesar_encode(char *buffer, int readed)
+{
   int i;
-  for(i = 0; i < read; i++)
-    buffer[i] = MEA(buffer[i], d, n);
+  for (i=0; i<readed; i++)
+    buffer[i] = (buffer[i] + 53) % 256;
 }
 
-/**
- * FIN SECCIÓN RSA
-*/
+void caesar_decode(char *buffer, int readed)
+{
+ int i;
+  for (i=0; i<readed; i++)
+    buffer[i] = (buffer[i] + 203) % 256;
+}
 
 int main(int argc, char *argv[]) {
   
@@ -395,7 +360,7 @@ int main(int argc, char *argv[]) {
       do_debug("TAP2NET %lu: Read %d bytes from the tap interface\n", tap2net, nread);
       
       // llamada al codificador Cesar
-      rsa_encode(buffer, nread, RSA_E, RSA_N);
+      caesar_encode(buffer, nread);
 
       /* write length + packet */
       plength = htons(nread);
@@ -423,7 +388,7 @@ int main(int argc, char *argv[]) {
       do_debug("NET2TAP %lu: Read %d bytes from the network\n", net2tap, nread);
 
       // llamada al decodificador Cesar
-      rsa_decode(buffer, nread, RSA_D, RSA_N);
+      caesar_decode(buffer, nread);
 
       /* now buffer[] contains a full packet or frame, write it into the tun/tap interface */ 
       nwrite = cwrite(tap_fd, buffer, nread);
