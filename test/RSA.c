@@ -148,15 +148,30 @@ void encode(e,n){
     printf("  Ciphered text C%d: %d\n", i+1, text[i]);
   }
 }
-
+/**
+ * 345
+ * 
+ * 3
+ * 34
+ * 345
+*/
 void decode(d,n){
   printf("\n");
-
-  for(int i = 0; i < len; i++){
-    printf("Ciphered text C%d: ", i+1);
-    scanf("%d", &text[i]);
-    text[i] = MEA(text[i], d, n);
-  }
+  int c, i, a, l;
+  char *buffer;
+  scanf("%d", &buffer);
+  i = 0;
+  l = 0;
+  c = buffer[i];
+  do{
+    do{
+      a*=10;
+      a+=c;
+      c = buffer[i++];
+    }while(c != ' ');
+    text[l++] = MEA(a, d, n);;
+    c = buffer[i++];
+  }while(c != '\n');
 
   printf("\n*************************************");
   printf("\n   Deciphered text: ");

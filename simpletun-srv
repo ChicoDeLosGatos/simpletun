@@ -1,0 +1,3 @@
+#!/bin/bash
+./simpletun -i tun0 -s &
+echo "./simpletun -i tun0 -s &"

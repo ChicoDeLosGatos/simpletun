@@ -49,6 +49,9 @@
 #define ETH_HDR_LEN 14
 #define ARP_PKT_LEN 28
 
+#define CAESAR_MAX 256
+#define CAESAR_SECRET 101
+
 int debug;
 char *progname;
 
@@ -177,18 +180,27 @@ void usage(void) {
   exit(1);
 }
 
+/**
+ * Realiza la función de desplazamiento para codificar los datos con el cifrado Cesar
+ * sobre el buffer que contiene todos los bytes de los datos que se van a enviar.
+*/
 void caesar_encode(char *buffer, int readed)
 {
   int i;
   for (i=0; i<readed; i++)
-    buffer[i] = (buffer[i] + 53) % 256;
+    buffer[i] = (buffer[i] + CAESAR_SECRET) % CAESAR_MAX; 
 }
 
+/**
+ * Realiza la función de desplazamiento inverso para decodificar los datos con el cifrado Cesar
+ * sobre el buffer que contiene todos los bytes de los datos recibidos.
+*/
 void caesar_decode(char *buffer, int readed)
 {
- int i;
+ int i, n;
+ n = CAESAR_MAX - CAESAR_SECRET;
   for (i=0; i<readed; i++)
-    buffer[i] = (buffer[i] + 203) % 256;
+    buffer[i] = (buffer[i] + n) % CAESAR_MAX;
 }
 
 int main(int argc, char *argv[]) {
@@ -359,7 +371,7 @@ int main(int argc, char *argv[]) {
       tap2net++;
       do_debug("TAP2NET %lu: Read %d bytes from the tap interface\n", tap2net, nread);
       
-      // llamada al codificador Cesar
+      // llamada al codificador Cesar antes de enviar los datos
       caesar_encode(buffer, nread);
 
       /* write length + packet */
@@ -387,7 +399,7 @@ int main(int argc, char *argv[]) {
       nread = read_n(net_fd, buffer, ntohs(plength));
       do_debug("NET2TAP %lu: Read %d bytes from the network\n", net2tap, nread);
 
-      // llamada al decodificador Cesar
+      // llamada al decodificador Cesar tras recibir los datos
       caesar_decode(buffer, nread);
 
       /* now buffer[] contains a full packet or frame, write it into the tun/tap interface */ 

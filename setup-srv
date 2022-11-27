@@ -5,11 +5,7 @@ ip link set tun0 up
 echo "ip link set tun0 up"
 ip addr add 10.122.101.1/30 dev tun0
 echo "ip addr add 10.122.101.1/30 dev tun0"
-./simpletun -i tun0 -s &
-echo "./simpletun -i tun0 -s &"
 ip route add 10.52.101.0/24 dev tun0
 echo "ip route add 10.52.101.0/24 dev tun0"
 echo "route -n"
 route -n
-./routes-srv
-./forwardup
