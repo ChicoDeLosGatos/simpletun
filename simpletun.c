@@ -177,9 +177,18 @@ void usage(void) {
   exit(1);
 }
 
-char[] caesar_cypher(char buffer[])
+void caesar_encode(char *buffer, int readed)
 {
+  int i;
+  for (i=0; i<readed; i++)
+    buffer[i] = (buffer[i] + 53) % 256;
+}
 
+void caesar_decode(char *buffer, int readed)
+{
+ int i;
+  for (i=0; i<readed; i++)
+    buffer[i] = (buffer[i] + 203) % 256;
 }
 
 int main(int argc, char *argv[]) {
@@ -349,6 +358,9 @@ int main(int argc, char *argv[]) {
 
       tap2net++;
       do_debug("TAP2NET %lu: Read %d bytes from the tap interface\n", tap2net, nread);
+      
+      // llamada al codificador Cesar
+      caesar_encode(buffer, nread);
 
       /* write length + packet */
       plength = htons(nread);
@@ -374,6 +386,9 @@ int main(int argc, char *argv[]) {
       /* read packet */
       nread = read_n(net_fd, buffer, ntohs(plength));
       do_debug("NET2TAP %lu: Read %d bytes from the network\n", net2tap, nread);
+
+      // llamada al decodificador Cesar
+      caesar_decode(buffer, nread);
 
       /* now buffer[] contains a full packet or frame, write it into the tun/tap interface */ 
       nwrite = cwrite(tap_fd, buffer, nread);
