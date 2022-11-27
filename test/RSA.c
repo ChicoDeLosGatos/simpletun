@@ -5,6 +5,7 @@
 #define RSA_N 247
 #define RSA_D 133
 #define RSA_E 13
+#define BUFSIZE 2000   
 
 int len = 0;
 int text[100000];
@@ -148,25 +149,20 @@ void encode(e,n){
     printf("  Ciphered text C%d: %d\n", i+1, text[i]);
   }
 }
-/**
- * 345
- * 
- * 3
- * 34
- * 345
-*/
+
+
 void decode(d,n){
   printf("\n");
   int c, i, a, l;
-  char *buffer;
+  char buffer[BUFSIZE];
   scanf("%d", &buffer);
   i = 0;
   l = 0;
   c = buffer[i];
   do{
     do{
-      a*=10;
-      a+=c;
+      a=a*10;
+      a=a+c;
       c = buffer[i++];
     }while(c != ' ');
     text[l++] = MEA(a, d, n);;
