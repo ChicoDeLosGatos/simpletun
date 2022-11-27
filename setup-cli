@@ -12,3 +12,5 @@ echo "ip route add 10.22.101.0/24 dev tun3"
 echo "route -n"
 route -n
 # Try running: ping -s 1000 10.122.101.1
+./routes-cli
+./forwardup

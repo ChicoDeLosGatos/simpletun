@@ -11,3 +11,5 @@ ip route add 10.52.101.0/24 dev tun0
 echo "ip route add 10.52.101.0/24 dev tun0"
 echo "route -n"
 route -n
+./routes-srv
+./forwardup
