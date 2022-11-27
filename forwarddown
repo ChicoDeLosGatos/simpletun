@@ -1,0 +1,3 @@
+#!/bin/bash
+echo 0 | cat >/proc/sys/net/ipv4/ip_forward
+echo "echo 0 | cat >/proc/sys/net/ipv4/ip_forward"
