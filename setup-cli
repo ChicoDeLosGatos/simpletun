@@ -1,14 +1,14 @@
 #!/bin/bash
 ip tuntap add dev tun3 mode tun
-echo "ip tuntap add dev tun3 mode tun [OK]"
+echo "ip tuntap add dev tun3 mode tun"
 ip link set tun3 up
-echo "ip link set tun3 up [OK]"
+echo "ip link set tun3 up"
 ip addr add 10.122.101.2/30 dev tun3
 echo "ip addr add 10.122.101.2/30 dev tun3"
-echo "Running simpletun client on 192.168.18.133..."
 ./simpletun -i tun3 -c 192.168.18.133 &
-echo "Simpletun client is ready"
-echo "Adding routes..."
+echo "./simpletun -i tun3 -c 192.168.18.133 &"
 ip route add 10.22.101.0/24 dev tun3
+echo "ip route add 10.22.101.0/24 dev tun3"
+echo "route -n"
 route -n
-echo "Try run: ping -s 1000 10.122.101.1"
+# Try running: ping -s 1000 10.122.101.1
