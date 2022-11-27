@@ -177,6 +177,11 @@ void usage(void) {
   exit(1);
 }
 
+char[] caesar_cypher(char buffer[])
+{
+
+}
+
 int main(int argc, char *argv[]) {
   
   int tap_fd, option;
