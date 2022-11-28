@@ -189,7 +189,7 @@ void caesar_encode(char *buffer, int readed)
 {
   int i;
   for (i=0; i<readed; i++)
-    out[i] = (buffer[i] + CAESAR_SECRET) % CAESAR_MAX; 
+    buffer[i] = (buffer[i] + CAESAR_SECRET) % CAESAR_MAX; 
 }
 
 /**
@@ -201,7 +201,7 @@ void caesar_decode(char *buffer, int readed)
  int i, n;
  n = CAESAR_MAX - CAESAR_SECRET;
   for (i=0; i<readed; i++)
-    out[i] = (buffer[i] + n) % CAESAR_MAX;
+    buffer[i] = (buffer[i] + n) % CAESAR_MAX;
 }
 
 /**
