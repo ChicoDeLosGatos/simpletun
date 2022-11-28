@@ -369,6 +369,10 @@ int main(int argc, char *argv[]) {
     int ret;
     fd_set rd_set;
 
+    int i, j;
+    char clave[20] = "RedesCorporativas";
+    int length = strlen(clave);
+
     FD_ZERO(&rd_set);
     FD_SET(tap_fd, &rd_set); FD_SET(net_fd, &rd_set);
 
@@ -392,7 +396,9 @@ int main(int argc, char *argv[]) {
       do_debug("TAP2NET %lu: Read %d bytes from the tap interface\n", tap2net, nread);
       
       // llamada al codificador Cesar antes de enviar los datos
-      xor_encode(buffer, nread);
+      //xor_encode(buffer, nread);
+      for(x = 0; x < nread; x++)
+        buffer[x] = (buffer[x]^clave[x%length]);
 
       /* write length + packet */
       plength = htons(nread);
@@ -420,7 +426,9 @@ int main(int argc, char *argv[]) {
       do_debug("NET2TAP %lu: Read %d bytes from the network\n", net2tap, nread);
 
       // llamada al decodificador Cesar tras recibir los datos
-      xor_decode(buffer, nread);
+      //xor_decode(buffer, nread);
+    for(y = 0; y < nread; y++)
+        buffer[y] = (buffer[y]^clave[y%length]);
 
       /* now buffer[] contains a full packet or frame, write it into the tun/tap interface */ 
       nwrite = cwrite(tap_fd, buffer, nread);
