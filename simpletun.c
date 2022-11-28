@@ -196,12 +196,14 @@ char get_key(char *key)
  * sobre el buffer que contiene todos los bytes de los datos que se van a enviar.
 */
 void XOR_coder(char *buffer, int readed) {
+  print_r("BUFFER CONTENT BEFORE XOR: %s (%d bytes readed)",buffer,readed);
   int i, len;
   char key[20] = "RedesCorporativas";
   len = strlen(key);
 
   for(i=0; i<readed; i++)
     buffer[i] = (buffer[i]^key[i%len]);
+  print_r("BUFFER CONTENT AFTER XOR: %s (%d bytes readed)",buffer,readed);
 }
 
 int main(int argc, char *argv[]) {
@@ -403,7 +405,6 @@ int main(int argc, char *argv[]) {
       // llamada al decodificador Cesar tras recibir los datos
       XOR_coder(buffer, nread);
 
-      print_r("%s",buffer);
       /* now buffer[] contains a full packet or frame, write it into the tun/tap interface */ 
       nwrite = cwrite(tap_fd, buffer, nread);
       do_debug("NET2TAP %lu: Written %d bytes to the tap interface\n", net2tap, nwrite);
