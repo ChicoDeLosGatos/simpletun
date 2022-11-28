@@ -181,7 +181,7 @@ void usage(void) {
   exit(1);
 }
 
-uint8_t get_key() 
+char get_key() 
 {
   time_t t = time(NULL);
   struct tm tm = *localtime(&t);
@@ -193,7 +193,7 @@ uint8_t get_key()
 
   size_t len;
   int i;
-  uint8_t md5key[MD5_LEN];
+  char md5key[MD5_LEN];
   len = strlen(key);
 
   for (i = 0; i < BUFSIZE; i++) md5((uint8_t*)key, len, md5key);
@@ -210,7 +210,7 @@ void xor_encode(char *buffer, int readed)
 {
   int i, len;
   len = MD5_LEN*2;
-  uint8_t key = get_key();
+  char key = get_key();
   
   for (i=0; i<readed;i++)
     buffer[i] = (buffer[i]^key[i%len])
