@@ -181,10 +181,10 @@ void usage(void) {
   exit(1);
 }
 
-char get_key(char *key) 
+void get_key(char *key) 
 {
   int len, i;
-  char *str = "RCO-Manel-y-Fran";
+  char *str = "RCO-Manel-y-Fran2022";
   char md5key[MD5_LEN];
   len = strlen(key);
   for (i = 0; i < BUFSIZE; i++) md5((uint8_t*)str, len, md5key);
@@ -198,7 +198,8 @@ char get_key(char *key)
 void XOR_coder(char *buffer, int readed) {
   do_debug("BUFFER CONTENT BEFORE XOR: %s (%d bytes readed)",buffer,readed);
   int i, len;
-  char key[20] = "RedesCorporativas";
+  char *key;
+  get_key(key);
   len = strlen(key);
 
   for(i=0; i<readed; i++)
