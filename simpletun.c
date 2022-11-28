@@ -50,7 +50,8 @@
 #define ETH_HDR_LEN 14
 #define ARP_PKT_LEN 28
 
-#define MD5_LEN 16
+#define CAESAR_MAX 256
+#define CAESAR_SECRET 101
 
 
 int debug;
@@ -185,18 +186,36 @@ void usage(void) {
  * Realiza la función de desplazamiento para codificar los datos con el cifrado Cesar
  * sobre el buffer que contiene todos los bytes de los datos que se van a enviar.
 */
-void XOR_coder(char *buffer, int readed) {
-  do_debug("BUFFER CONTENT BEFORE XOR: %s (%d bytes readed)",buffer,readed);
-  int i, len;
-  char *sec = "AAALKJSDLKJLSDFKJ3KRLJ9EOIKLNAR39";
-  char *ret = "lkjslkjslaskdjflkasjj";  
-  char *key = hashfunc(sec,ret);
-  
-  len = strlen(key);
+void caesar_encode(char *buffer, int readed, char *out)
+{
+  int i;
+  for (i=0; i<readed; i++)
+    out[i] = (buffer[i] + CAESAR_SECRET) % CAESAR_MAX; 
+}
 
+/**
+ * Realiza la función de desplazamiento inverso para decodificar los datos con el cifrado Cesar
+ * sobre el buffer que contiene todos los bytes de los datos recibidos.
+*/
+void caesar_decode(char *buffer, int readed, char *out)
+{
+ int i, n;
+ n = CAESAR_MAX - CAESAR_SECRET;
+  for (i=0; i<readed; i++)
+    out[i] = (buffer[i] + n) % CAESAR_MAX;
+}
+
+/**
+ * Realiza la función de desplazamiento para codificar los datos con el cifrado Cesar
+ * sobre el buffer que contiene todos los bytes de los datos que se van a enviar.
+*/
+void XOR_coder(char *buffer, int readed) {
+  int i, len;
+  char *key;
+  caesar_encode(buffer, readed, key);
+  len = strlen(key);
   for(i=0; i<readed; i++)
     buffer[i] = (buffer[i]^key[i%len]);
-  do_debug("BUFFER CONTENT AFTER XOR: %s (%d bytes readed)",buffer,readed);
 }
 
 int main(int argc, char *argv[]) {
