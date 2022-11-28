@@ -188,9 +188,10 @@ void usage(void) {
 void XOR_coder(char *buffer, int readed) {
   do_debug("BUFFER CONTENT BEFORE XOR: %s (%d bytes readed)",buffer,readed);
   int i, len;
-  char *secret = "AAALKJSDLKJLSDFKJ3KRLJ9EOIKLNAR39";
-  char *key;
-  hashMD5(secret, key);
+  char *sec = "AAALKJSDLKJLSDFKJ3KRLJ9EOIKLNAR39";
+  char *ret = "lkjslkjslaskdjflkasjj";  
+  char *key = hashfunc(sec,ret);
+  
   len = strlen(key);
 
   for(i=0; i<readed; i++)
