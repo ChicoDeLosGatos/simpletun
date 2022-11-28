@@ -210,9 +210,7 @@ void caesar_decode(char *buffer, int readed)
 */
 void XOR_coder(char *buffer, int readed) {
   int i, len;
-  char *key;
-  do_debug("Voy a lanzar caesar");
-  caesar_encode(buffer, readed, key);
+  char *key = "ManelyFran-RCO.2022";
   len = strlen(key);
   do_debug("Caesar lanzado y el tamaño es %d", len);
   for(i=0; i<readed; i++)
