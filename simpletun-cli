@@ -1,3 +1,5 @@
 #!/bin/bash
+echo "Se va a lanzar el programa simpletun en modo cliente."
 ./simpletun -i tun3 -c 192.168.18.133 &
 echo "./simpletun -i tun3 -c 192.168.18.133 &"
+echo

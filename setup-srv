@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "Se va a instalar tuntap en modo servidor."
 ip tuntap add dev tun0 mode tun
 echo "ip tuntap add dev tun0 mode tun"
 ip link set tun0 up
@@ -7,5 +8,5 @@ ip addr add 10.122.101.1/30 dev tun0
 echo "ip addr add 10.122.101.1/30 dev tun0"
 ip route add 10.52.101.0/24 dev tun0
 echo "ip route add 10.52.101.0/24 dev tun0"
-echo "route -n"
 route -n
+echo

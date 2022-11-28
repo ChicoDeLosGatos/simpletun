@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <linux/if.h>
@@ -38,6 +37,7 @@
 #include <sys/time.h>
 #include <errno.h>
 #include <stdarg.h>
+#include "md5.h"
 
 /* buffer for reading from tun/tap interface, must be >= 1500 */
 #define BUFSIZE 2000   
@@ -50,9 +50,8 @@
 #define ETH_HDR_LEN 14
 #define ARP_PKT_LEN 28
 
-#define RSA_N 247
-#define RSA_D 133
-#define RSA_E 13
+#define MD5_LEN 16
+
 
 int debug;
 char *progname;
@@ -182,49 +181,58 @@ void usage(void) {
   exit(1);
 }
 
-/**
- * SECCIÓN RSA
-*/
+uint8_t get_key() 
+{
+  time_t t = time(NULL);
+  struct tm tm = *localtime(&t);
+  int year = tm.tm_year+1900;
+  int month = tm.tm_mon+1;
+  int day = tm.tm_mday;
+  
+  char *key = f"{year}{month}{day}RCO-Manel-y-Fran"
 
-// The Modular Exponentiation Algorithm
-int MEA(int p, int e, int n){
- 
-  int r2 = 1;
-  int r1 = 0;
-  int Q = 0;
-  int R = 0;
- 
-  while( e != 0 ){
-     R = (e % 2);
-     Q = ((e - R) / 2);
- 
-     r1 = ((p * p) % n);
- 
-       if(R == 1){
-          r2 = ((r2 * p) % n);
-       }
-     p = r1;
-     e = Q;
-  }
-return r2;
-}
-
-// Received input from user
-void rsa_encode(char *buffer, int read, int e, int n){
-  int i = 0;
- for(i = 0; i < read; i++)
-    buffer[i] = MEA(buffer[i], e, n);
-}
-
-void rsa_decode(char *buffer, int read, int d, int n){
+  size_t len;
   int i;
-  for(i = 0; i < read; i++)
-    buffer[i] = MEA(buffer[i], d, n);
+  uint8_t md5key[MD5_LEN];
+  len = strlen(key);
+
+  for (i = 0; i < BUFSIZE; i++) md5((uint8_t*)key, len, md5key);
+
+  return md5key;
+
 }
 
 /**
- * FIN SECCIÓN RSA
+ * Realiza la función de desplazamiento para codificar los datos con el cifrado Cesar
+ * sobre el buffer que contiene todos los bytes de los datos que se van a enviar.
 */
+void nox_encode(char *buffer, int readed)
+{
+  int i, len;
+  len = MD5_LEN*2;
+  uint8_t key = get_key();
+  
+  for (i=0; i<readed;i++)
+    buffer[i] = (buffer[i]^key[i%len])
+
+  
+  
+
+}
+
+/**
+ * Realiza la función de desplazamiento inverso para decodificar los datos con el cifrado Cesar
+ * sobre el buffer que contiene todos los bytes de los datos recibidos.
+*/
+void nox_decode(char *buffer, int readed)
+{
+  int i, len;
+  len = MD5_LEN*2;
+  uint8_t key = get_key();
+  
+  for (i=0; i<readed;i++)
+    buffer[i] = (buffer[i]^key[i%len])
+}
 
 int main(int argc, char *argv[]) {
   
@@ -394,8 +402,8 @@ int main(int argc, char *argv[]) {
       tap2net++;
       do_debug("TAP2NET %lu: Read %d bytes from the tap interface\n", tap2net, nread);
       
-      // llamada al codificador Cesar
-      rsa_encode(buffer, nread, RSA_E, RSA_N);
+      // llamada al codificador Cesar antes de enviar los datos
+      xor_encode(buffer, nread);
 
       /* write length + packet */
       plength = htons(nread);
@@ -422,8 +430,8 @@ int main(int argc, char *argv[]) {
       nread = read_n(net_fd, buffer, ntohs(plength));
       do_debug("NET2TAP %lu: Read %d bytes from the network\n", net2tap, nread);
 
-      // llamada al decodificador Cesar
-      rsa_decode(buffer, nread, RSA_D, RSA_N);
+      // llamada al decodificador Cesar tras recibir los datos
+      xor_decode(buffer, nread);
 
       /* now buffer[] contains a full packet or frame, write it into the tun/tap interface */ 
       nwrite = cwrite(tap_fd, buffer, nread);

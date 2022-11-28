@@ -1,4 +1,0 @@
-#!/bin/bash
-ip route del 10.52.101.0/24 dev tun0
-ip route add 10.52.101.0/24 dev tun0 src 10.22.101.2
-echo "Done"

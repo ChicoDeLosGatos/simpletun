@@ -1,3 +1,5 @@
 #!/bin/bash
+echo "Se va a lanzar el programa simpletun en modo servidor."
 ./simpletun -i tun0 -s &
 echo "./simpletun -i tun0 -s &"
+echo

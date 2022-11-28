@@ -1,0 +1,9 @@
+#!/bin/bash
+echo "Se va a sactivar de forma permanente el IP forwarding en el sistema. ¿Desea continuar?"
+select yn in "s" "N"; do
+    case $yn in
+        s ) sed -i -e 's/net.ipv4.ip_forward = 0//' /etc/sysctl.conf; echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf; break;;
+        N ) exit;;
+    esac
+done
+echo

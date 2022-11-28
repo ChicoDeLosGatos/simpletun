@@ -1,0 +1,9 @@
+#!/bin/bash
+echo "Se va a modificar la ruta 10.52.101.0/24 para que tenga una conexión site-to-site con 10.22.101.2"
+ip route del 10.52.101.0/24 dev tun3
+echo "ip route del 10.52.101.0/24 dev tun3"
+ip route add 10.52.101.0/24 dev tun3 src 10.22.101.2
+echo "ip route add 10.52.101.0/24 dev tun3 src 10.22.101.2"
+ip route show
+route -n
+echo
