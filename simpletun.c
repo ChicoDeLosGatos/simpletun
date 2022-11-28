@@ -198,7 +198,7 @@ char get_key(char *key)
 void xor_encode(char *buffer, int readed)
 {
   int i, l;
-  char key[20] = "RedesCorporativas";
+  char key[20] = "RCO-Manel-y-Fran2022";
   l = strlen(key);
   
   for (i=0; i<readed;i++)
@@ -215,8 +215,8 @@ void xor_encode(char *buffer, int readed)
 */
 void xor_decode(char *buffer, int readed)
 {
-   int i, l;
-  char key[20] = "RedesCorporativas";
+  int i, l;
+  char key[20] = "RCO-Manel-y-Fran2022";
   l = strlen(key);
   
   for (i=0; i<readed;i++)
