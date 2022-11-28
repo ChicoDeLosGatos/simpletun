@@ -188,10 +188,10 @@ char get_key(char *key)
   int year = tm.tm_year+1900;
   int month = tm.tm_mon+1;
   int day = tm.tm_mday;
+  int len;
   
   char *key = f"{year}{month}{day}RCO-Manel-y-Fran"
 
-  size_t len;
   int i;
   char md5key[MD5_LEN];
   len = strlen(key);
