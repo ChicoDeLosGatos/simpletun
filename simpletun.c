@@ -183,14 +183,9 @@ void usage(void) {
 
 char get_key(char *key) 
 {
-  time_t t = time(NULL);
-  struct tm tm = *localtime(&t);
-  int year = tm.tm_year+1900;
-  int month = tm.tm_mon+1;
-  int day = tm.tm_mday;
   int len;
   
-  char *key = f"{year}{month}{day}RCO-Manel-y-Fran"
+  char *key = "RCO-Manel-y-Fran"
 
   int i;
   char md5key[MD5_LEN];
