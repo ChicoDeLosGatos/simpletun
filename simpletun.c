@@ -181,7 +181,7 @@ void usage(void) {
   exit(1);
 }
 
-char get_key() 
+char get_key(char *key) 
 {
   time_t t = time(NULL);
   struct tm tm = *localtime(&t);
@@ -198,7 +198,7 @@ char get_key()
 
   for (i = 0; i < BUFSIZE; i++) md5((uint8_t*)key, len, md5key);
 
-  return md5key;
+  key=md5key;
 
 }
 
@@ -208,12 +208,12 @@ char get_key()
 */
 void xor_encode(char *buffer, int readed)
 {
-  int i, len;
-  len = MD5_LEN*2;
-  char key[MD5_LEN] = get_key();
+  int i;
+  char key[MD5_LEN];
+  get_key(key);
   
   for (i=0; i<readed;i++)
-    buffer[i] = (buffer[i]^key[i%len])
+    buffer[i] = (buffer[i]^key[i%MD5_LEN])
 
   
   
@@ -226,12 +226,13 @@ void xor_encode(char *buffer, int readed)
 */
 void xor_decode(char *buffer, int readed)
 {
-  int i, len;
-  len = MD5_LEN*2;
-  uint8_t key = get_key();
+  int i;
+   char key[MD5_LEN];
+  get_key(key);
+  
   
   for (i=0; i<readed;i++)
-    buffer[i] = (buffer[i]^key[i%len])
+    buffer[i] = (buffer[i]^key[i%MD5_LEN])
 }
 
 int main(int argc, char *argv[]) {
