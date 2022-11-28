@@ -197,12 +197,12 @@ char get_key(char *key)
 */
 void xor_encode(char *buffer, int readed)
 {
-  int i, l;
-  char key[20] = "RedesCorporativas";
-  l = strlen(key);
+  int i;
+  char key[MD5_LEN];
+  get_key(key);
   
   for (i=0; i<readed;i++)
-    buffer[i] = (buffer[i]^key[i%l]);
+    buffer[i] = (buffer[i]^key[i%MD5_LEN]);
 
   
   
@@ -215,12 +215,13 @@ void xor_encode(char *buffer, int readed)
 */
 void xor_decode(char *buffer, int readed)
 {
-   int i, l;
-  char key[20] = "RedesCorporativas";
-  l = strlen(key);
+  int i;
+   char key[MD5_LEN];
+  get_key(key);
+  
   
   for (i=0; i<readed;i++)
-    buffer[i] = (buffer[i]^key[i%l]);
+    buffer[i] = (buffer[i]^key[i%MD5_LEN]);
 }
 
 int main(int argc, char *argv[]) {
