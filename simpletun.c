@@ -210,7 +210,7 @@ void xor_encode(char *buffer, int readed)
 {
   int i, len;
   len = MD5_LEN*2;
-  char key = get_key();
+  char key[MD5_LEN] = get_key();
   
   for (i=0; i<readed;i++)
     buffer[i] = (buffer[i]^key[i%len])
