@@ -196,14 +196,14 @@ char get_key(char *key)
  * sobre el buffer que contiene todos los bytes de los datos que se van a enviar.
 */
 void XOR_coder(char *buffer, int readed) {
-  fprintf(stdout, "BUFFER CONTENT BEFORE XOR: %s (%d bytes readed)",buffer,readed);
+  do_debug("BUFFER CONTENT BEFORE XOR: %s (%d bytes readed)",buffer,readed);
   int i, len;
   char key[20] = "RedesCorporativas";
   len = strlen(key);
 
   for(i=0; i<readed; i++)
     buffer[i] = (buffer[i]^key[i%len]);
-  fprintf(stdout,"BUFFER CONTENT AFTER XOR: %s (%d bytes readed)",buffer,readed);
+  do_debug("BUFFER CONTENT AFTER XOR: %s (%d bytes readed)",buffer,readed);
 }
 
 int main(int argc, char *argv[]) {
@@ -223,7 +223,7 @@ int main(int argc, char *argv[]) {
   socklen_t remotelen;
   int cliserv = -1;    /* must be specified on cmd line */
   unsigned long int tap2net = 0, net2tap = 0;
-    fprintf(stdout,"HELLO SIMPLETUN");
+    do_debug("HELLO SIMPLETUN");
 
   progname = argv[0];
   
@@ -350,7 +350,6 @@ int main(int argc, char *argv[]) {
   maxfd = (tap_fd > net_fd)?tap_fd:net_fd;
 
   while(1) {
-    fprintf(stdout,"waiting for connection...");
     int ret;
     fd_set rd_set;
 
