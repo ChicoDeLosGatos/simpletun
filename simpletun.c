@@ -181,16 +181,6 @@ void usage(void) {
   exit(1);
 }
 
-void get_key(char *key) 
-{
-  int len, i;
-  char *str = "RCO-Manel-y-Fran2022";
-  char md5key[MD5_LEN];
-  len = strlen(key);
-  for (i = 0; i < BUFSIZE; i++) md5((uint8_t*)str, len, md5key);
-  key=md5key;
-}
-
 /**
  * Realiza la función de desplazamiento para codificar los datos con el cifrado Cesar
  * sobre el buffer que contiene todos los bytes de los datos que se van a enviar.
@@ -198,8 +188,9 @@ void get_key(char *key)
 void XOR_coder(char *buffer, int readed) {
   do_debug("BUFFER CONTENT BEFORE XOR: %s (%d bytes readed)",buffer,readed);
   int i, len;
-  char *key = "AAALKJSDLKJLSDFKJ3KRLJ9EOIKLNAR39";
- // get_key(key);
+  char *secret = "AAALKJSDLKJLSDFKJ3KRLJ9EOIKLNAR39";
+  char *key;
+  hashMD5(secret, key);
   len = strlen(key);
 
   for(i=0; i<readed; i++)
