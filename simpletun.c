@@ -202,7 +202,7 @@ void xor_encode(char *buffer, int readed)
   get_key(key);
   
   for (i=0; i<readed;i++)
-    buffer[i] = (buffer[i]^key[i%MD5_LEN])
+    buffer[i] = (buffer[i]^key[i%MD5_LEN]);
 
   
   
@@ -221,7 +221,7 @@ void xor_decode(char *buffer, int readed)
   
   
   for (i=0; i<readed;i++)
-    buffer[i] = (buffer[i]^key[i%MD5_LEN])
+    buffer[i] = (buffer[i]^key[i%MD5_LEN]);
 }
 
 int main(int argc, char *argv[]) {
