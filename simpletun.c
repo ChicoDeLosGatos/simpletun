@@ -206,7 +206,7 @@ uint8_t get_key()
  * Realiza la función de desplazamiento para codificar los datos con el cifrado Cesar
  * sobre el buffer que contiene todos los bytes de los datos que se van a enviar.
 */
-void nox_encode(char *buffer, int readed)
+void xor_encode(char *buffer, int readed)
 {
   int i, len;
   len = MD5_LEN*2;
@@ -224,7 +224,7 @@ void nox_encode(char *buffer, int readed)
  * Realiza la función de desplazamiento inverso para decodificar los datos con el cifrado Cesar
  * sobre el buffer que contiene todos los bytes de los datos recibidos.
 */
-void nox_decode(char *buffer, int readed)
+void xor_decode(char *buffer, int readed)
 {
   int i, len;
   len = MD5_LEN*2;
