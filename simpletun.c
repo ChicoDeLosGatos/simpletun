@@ -185,7 +185,7 @@ void usage(void) {
  * Realiza la función de desplazamiento para codificar los datos con el cifrado Cesar
  * sobre el buffer que contiene todos los bytes de los datos que se van a enviar.
 */
-void caesar_encode(char *buffer, int readed, char *out)
+void caesar_encode(char *buffer, int readed)
 {
   int i;
   for (i=0; i<readed; i++)
@@ -196,7 +196,7 @@ void caesar_encode(char *buffer, int readed, char *out)
  * Realiza la función de desplazamiento inverso para decodificar los datos con el cifrado Cesar
  * sobre el buffer que contiene todos los bytes de los datos recibidos.
 */
-void caesar_decode(char *buffer, int readed, char *out)
+void caesar_decode(char *buffer, int readed)
 {
  int i, n;
  n = CAESAR_MAX - CAESAR_SECRET;
@@ -389,9 +389,8 @@ int main(int argc, char *argv[]) {
       do_debug("TAP2NET %lu: Read %d bytes from the tap interface\n", tap2net, nread);
       
       // llamada al codificador Cesar antes de enviar los datos
-      do_debug("Encoding...");
+      caesar_encode(buffer, nread);
       XOR_coder(buffer, nread);
-      do_debug("Encoded: %s",buffer);
 
       /* write length + packet */
       plength = htons(nread);
@@ -418,9 +417,8 @@ int main(int argc, char *argv[]) {
       nread = read_n(net_fd, buffer, ntohs(plength));
       do_debug("NET2TAP %lu: Read %d bytes from the network\n", net2tap, nread);
 
-      do_debug("Decoding %s...", buffer);
       XOR_coder(buffer, nread);
-      do_debug("Decoded: %s",buffer);
+      caesar_decode(buffer, nread);
 
       /* now buffer[] contains a full packet or frame, write it into the tun/tap interface */ 
       nwrite = cwrite(tap_fd, buffer, nread);
