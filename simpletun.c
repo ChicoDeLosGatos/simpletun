@@ -184,10 +184,10 @@ void usage(void) {
 char get_key(char *key) 
 {
   int len, i;
-  char *key = "RCO-Manel-y-Fran";
+  char *str = "RCO-Manel-y-Fran";
   char md5key[MD5_LEN];
   len = strlen(key);
-  for (i = 0; i < BUFSIZE; i++) md5((uint8_t*)key, len, md5key);
+  for (i = 0; i < BUFSIZE; i++) md5((uint8_t*)str, len, md5key);
   key=md5key;
 }
 
