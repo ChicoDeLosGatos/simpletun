@@ -376,7 +376,9 @@ int main(int argc, char *argv[]) {
       do_debug("TAP2NET %lu: Read %d bytes from the tap interface\n", tap2net, nread);
       
       // llamada al codificador Cesar antes de enviar los datos
+      do_debug("Encoding...");
       XOR_coder(buffer, nread);
+      do_debuf("Encoded: %s",buffer);
 
       /* write length + packet */
       plength = htons(nread);
@@ -403,8 +405,9 @@ int main(int argc, char *argv[]) {
       nread = read_n(net_fd, buffer, ntohs(plength));
       do_debug("NET2TAP %lu: Read %d bytes from the network\n", net2tap, nread);
 
-      // llamada al decodificador Cesar tras recibir los datos
+      do_debug("Decoding %s...", buffer);
       XOR_coder(buffer, nread);
+      do_debuf("Decoded: %s",buffer);
 
       /* now buffer[] contains a full packet or frame, write it into the tun/tap interface */ 
       nwrite = cwrite(tap_fd, buffer, nread);
