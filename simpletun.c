@@ -198,8 +198,8 @@ void get_key(char *key)
 void XOR_coder(char *buffer, int readed) {
   do_debug("BUFFER CONTENT BEFORE XOR: %s (%d bytes readed)",buffer,readed);
   int i, len;
-  char *key;
-  get_key(key);
+  char *key = "AAALKJSDLKJLSDFKJ3KRLJ9EOIKLNAR39";
+ // get_key(key);
   len = strlen(key);
 
   for(i=0; i<readed; i++)
